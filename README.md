@@ -87,6 +87,10 @@ cd client
 npm install
 ```
 
+Create a .env file in the server directory using the environment variables required by the project.
+
+```VITE_API_BASE_URL=http://localhost:5000```
+
 Configure the frontend API base URL according to your local backend configuration, then start the development server:
 
 ```bash
