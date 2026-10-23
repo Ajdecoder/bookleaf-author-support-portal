@@ -32,24 +32,24 @@ async function seedUsers() {
     }
 
     await user.save();
+  } 
+
+  // Create admin if it doesn't exist.
+  let admin = await User.findOne({
+    email: "admin@bookleaf.com",
+  });
+
+  if (!admin) {
+    admin = new User({
+      name: "BookLeaf Admin",
+      email: "admin@bookleaf.com",
+      role: "admin",
+    });
+
+    await admin.setPassword("admin@123");
+
+    await admin.save();
   }
-
-  // // Create admin if it doesn't exist.
-  // let admin = await User.findOne({
-  //   email: "admin@bookleaf.com",
-  // });
-
-  // if (!admin) {
-  //   admin = new User({
-  //     name: "BookLeaf Admin",
-  //     email: "admin@bookleaf.com",
-  //     role: "admin",
-  //   });
-
-  //   await admin.setPassword("admin@123");
-
-  //   await admin.save();
-  // }
 
   console.log("Users seeded");
 }
@@ -253,13 +253,13 @@ async function seedTickets() {
   console.log("Tickets and messages seeded for all authors");
 }
 
-// seedTickets()
 
 async function runSeed() {
   try {
     await connectDB();
     await seedUsers();
     await seedBooks();
+    await seedTickets()
 
     console.log("Seeding completed");
     process.exitCode = 0;
