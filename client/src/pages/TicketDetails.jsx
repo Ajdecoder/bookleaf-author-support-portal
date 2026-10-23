@@ -381,7 +381,7 @@ export default function TicketDetails() {
               );
             })}
 
-            {messages.length === 0 && (
+            {messages?.length === 0 && (
               <p className="text-sm text-slate-500">No replies yet.</p>
             )}
           </div>
