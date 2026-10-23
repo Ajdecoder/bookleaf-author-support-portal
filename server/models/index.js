@@ -5,4 +5,5 @@ module.exports = {
   Ticket: require("./ticket.model"),
   TicketReply: require("./ticketReply.model"),
   TicketAttachment: require("./ticketAttachment.model"),
+  Withdrawal: require("./withdrawl.model"),
 };

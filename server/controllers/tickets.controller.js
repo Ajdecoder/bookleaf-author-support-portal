@@ -158,6 +158,8 @@
 
   // Update ticket (admin only)
   const updateTicket = async (req, res) => {
+
+    console.log('update controller hit hua')
     try {
       if (req.user.role !== "admin") {
         return res.status(403).json({ message: "Admin access required" });

@@ -23,7 +23,17 @@ const authorLinks = [
 ];
 
 const adminLinks = [
-  { to: "/admin/tickets", label: "Ticket Queue", icon: Ticket },
+  {
+    to: "/admin/dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    to: "/admin/tickets",
+    label: "Ticket Queue",
+    icon: Ticket,
+  },
+
 ];
 
 export default function Sidebar() {

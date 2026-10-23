@@ -3,7 +3,6 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const authorsRoutes = require("./routes/authors.routes");
 const withdrawalsRoutes = require("./routes/withdrawals.routes");
-
 const errorHandler = require("./middleware/errorHandler");
 const { login } = require("./controllers/auth.controller");
 const authenticate = require("./middleware/auth");
@@ -43,6 +42,8 @@ app.get("/", (req, res) => {
       authorSales: "/authors/:id/sales",
       createWithdrawal: "POST /withdrawals",
       authorWithdrawals: "/authors/:id/withdrawals",
+      royaltySummary: "GET /royalties/summary",
+      royaltyWithdraw: "POST /royalties/withdraw",
       login: "POST /auth/login",
       health: "/health",
     },
@@ -66,6 +67,7 @@ app.use("/authors", authorsRoutes);
 app.use("/withdrawals", withdrawalsRoutes);
 app.use("/books", require("./routes/books.routes"));
 app.use("/tickets", require("./routes/tickets.routes"));
+app.use("/royalties", require("./routes/royalty.routes"));
 
 // 404 handler
 app.use((req, res) => {
