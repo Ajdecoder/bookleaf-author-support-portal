@@ -81,7 +81,6 @@ const ticketSchema = new mongoose.Schema(
         createdAt: { type: Date, default: Date.now },
       },
     ],
-    // AI suggestions are stored separately from admin-approved values.
     aiCategory: {
       type: String,
       enum: [...TICKET_CATEGORIES, null],

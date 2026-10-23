@@ -15,13 +15,13 @@ const {
 
 const router = express.Router();
 
-// Assumes authentication middleware is applied before these routes.
-// If not, add your authenticate middleware to this router.
+
+
 
 router.get("/", getAllTickets);
 router.get("/recent", getRecentTickets);
 
-// Keep specific routes before /:id
+
 router.get("/author/:authorId", getTicketByAuthorId);
 router.get("/id/:ticketId", getTicketById);
 

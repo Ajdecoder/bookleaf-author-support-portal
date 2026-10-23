@@ -27,7 +27,7 @@ function initSocket(httpServer) {
     },
   });
 
-  // Authentication Middleware: Verify token from handshake auth or headers
+  
   io.use(async (socket, next) => {
     try {
       const token =
@@ -49,7 +49,7 @@ function initSocket(httpServer) {
         return next(new Error("Invalid token payload"));
       }
 
-      // Verify against database - never trust client claims
+      
       const user = await User.findById(decoded.id);
       if (!user || !user.isActive) {
         return next(new Error("Invalid or inactive user"));
@@ -73,20 +73,20 @@ function initSocket(httpServer) {
   io.on("connection", (socket) => {
     const { id, role, authorId } = socket.user;
 
-    // Join user's individual room
+    
     socket.join(`user:${id}`);
 
-    // Admins join the admin room
+    
     if (role === "admin") {
       socket.join("admin");
     }
 
-    // Authors join their author-specific room
+    
     if (role === "author" && authorId) {
       socket.join(`author:${authorId}`);
     }
 
-    // Join a specific ticket room (with strict authorization check)
+    
     socket.on("join_ticket", async (ticketId, callback) => {
       try {
         if (!ticketId) {
@@ -102,9 +102,9 @@ function initSocket(httpServer) {
           return callback && callback({ error: "Ticket not found" });
         }
 
-        // Check permission:
-        // Admin can join any ticket room.
-        // Author can ONLY join rooms for tickets they own.
+        
+        
+        
         const isOwner =
           (authorId && ticket.authorId === authorId) ||
           ticket.authorId === id;
@@ -129,14 +129,14 @@ function initSocket(httpServer) {
       }
     });
 
-    // Leave a specific ticket room
+    
     socket.on("leave_ticket", (ticketId) => {
       if (!ticketId) return;
       socket.leave(`ticket:${ticketId}`);
     });
 
     socket.on("disconnect", () => {
-      // Sockets leave rooms automatically on disconnect
+      
     });
   });
 
@@ -147,9 +147,7 @@ function getIO() {
   return io;
 }
 
-/**
- * Emit a new conversation message to ticket room and notify lists
- */
+
 function emitNewMessage(ticket, message) {
   if (!io) return;
   const ticketIdStr = ticket._id.toString();
@@ -165,7 +163,7 @@ function emitNewMessage(ticket, message) {
     io.to(`ticket:${ticket.id}`).emit("new_message", payload);
   }
 
-  // Update lists in real time
+  
   io.to("admin").emit("ticket_list_updated", {
     ticketId: ticketIdStr,
     ticket: ticket.toObject ? ticket.toObject() : ticket,
@@ -198,13 +196,13 @@ function emitTicketUpdate(ticket) {
     });
   }
 
-  // Notify admin queue with full ticket
+  
   io.to("admin").emit("ticket_list_updated", {
     ticketId: ticketIdStr,
     ticket: ticket.toObject ? ticket.toObject() : ticket,
   });
 
-  // Notify author list with sanitized ticket
+  
   if (ticket.authorId) {
     io.to(`author:${ticket.authorId}`).emit("ticket_list_updated", {
       ticketId: ticketIdStr,
@@ -236,7 +234,7 @@ function emitInternalNote(ticket, note) {
   if (!io) return;
   const ticketIdStr = ticket._id.toString();
 
-  // Broadcast ONLY to admins, never to authors
+  
   io.to("admin").emit("internal_note_added", {
     ticketId: ticketIdStr,
     note,

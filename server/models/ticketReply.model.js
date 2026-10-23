@@ -20,7 +20,6 @@ const ticketReplySchema = new mongoose.Schema(
       minlength: 1,
       maxlength: 10000,
     },
-    // Internal notes must never be returned by author-facing endpoints.
     isInternal: {
       type: Boolean,
       default: false,

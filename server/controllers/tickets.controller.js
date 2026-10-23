@@ -15,7 +15,7 @@
   const PRIORITIES = ["Critical", "High", "Medium", "Low"];
   const STATUSES = ["Open", "In Progress", "Resolved", "Closed"];
 
-  // Create ticket
+  
   const createTicket = async (req, res) => {
     try {
       const { subject, description, bookId } = req.body;
@@ -41,7 +41,7 @@
         ticket,
       });
 
-      // Run AI after responding so provider downtime never blocks ticket submission.
+      
       analyzeAndSaveTicket(ticket._id).catch((error) => {
         console.error("Ticket AI analysis failed:", error.code || error.message);
       });
@@ -53,7 +53,7 @@
     }
   };
 
-  // Get tickets: authors see their own, admins see all
+  
   const getAllTickets = async (req, res) => {
 
     console.log('getall ticker called')
@@ -74,20 +74,20 @@
   };
 
 
-  //     console.log("MY BOOKS USER:", req.user);
+  
 
-  //     const books = await Book.find({ authorId: req.user.id });
-  //     console.log("BOOKS MATCHED BY USER ID:", books.length);
+  
+  
 
-  //     return res.json(books);
-  //   } catch (error) {
-  //     console.error("getMyBooks:", error);
-  //     return res.status(500).json({
-  //       message: "Failed to fetch your books",
-  //     });
-  //   }
+  
+  
+  
+  
+  
+  
+  
 
-  // Get tickets for one author (admin only)
+  
   const getTicketByAuthorId = async (req, res) => {
 
 
@@ -127,7 +127,7 @@
     }
   };
 
-  // Get one ticket
+  
   const getTicketDetails = async (req, res) => {
     try {
       const ticketId = req.params.id || req.params.ticketId;
@@ -146,7 +146,7 @@
         return res.status(404).json({ message: "Ticket not found" });
       }
 
-      // Authors can view only their own ticket.
+      
       if (
         req.user.role !== "admin" &&
         ticket.authorId !== req.user.authorId &&
@@ -164,7 +164,7 @@
     }
   };
 
-  // Update ticket (admin only)
+  
   const updateTicket = async (req, res) => {
     try {
       if (req.user?.role !== "admin") {
@@ -336,7 +336,7 @@
         });
       }
 
-      // Authors can reply only to their own tickets.
+      
       if (
         user.role === "author" &&
         ticket.authorId !== user.authorId
@@ -346,7 +346,7 @@
         });
       }
 
-      // Fetch the logged-in user's actual account details.
+      
       const account = await User.findById(user.id);
 
       if (!account) {
@@ -366,7 +366,7 @@
         });
       }
 
-      // Repair legacy messages that lack required senderName.
+      
       ticket.messages.forEach((existingMessage) => {
         if (!existingMessage.senderName?.trim()) {
           existingMessage.senderName =

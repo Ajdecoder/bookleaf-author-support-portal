@@ -36,7 +36,6 @@ const royaltySchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
-    // Kept as a stored snapshot for convenient reporting; update alongside totalEarned/paidAmount.
     pendingAmount: {
       type: Number,
       min: 0,

@@ -50,7 +50,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Pass a plain password to this method when creating/changing a password.
 userSchema.methods.setPassword = async function setPassword(plainPassword) {
   if (typeof plainPassword !== "string" || plainPassword.length < 8) {
     throw new Error("Password must be at least 8 characters long");
@@ -59,7 +58,6 @@ userSchema.methods.setPassword = async function setPassword(plainPassword) {
 };
 
 userSchema.methods.comparePassword = async function comparePassword(plainPassword) {
-  // passwordHash must be selected explicitly: User.findOne(...).select("+passwordHash")
   if (!this.passwordHash) return false;
   return bcrypt.compare(plainPassword, this.passwordHash);
 };

@@ -109,7 +109,7 @@ export default function Login() {
 
         <div className="mt-6 rounded-lg bg-slate-50 p-4 text-xs text-slate-600">
           <p className="font-semibold">Test credentials</p>
-          <p>Author: author@bookleaf.com / author@123</p>
+          <p>Author: author@bookleaf.com / Author@123</p>
           <p>Admin: admin@bookleaf.com / admin@123</p>
         </div>
       </div>
