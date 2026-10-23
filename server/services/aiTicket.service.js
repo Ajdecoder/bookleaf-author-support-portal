@@ -51,7 +51,7 @@ if (!response.ok) {
     message: payload.error?.message,
     type: payload.error?.type,
     code: payload.error?.code,
-    model: process.env.GROQ_MODEL || "llama-3.1-8b-instant",
+    model: process.env.GROQ_MODEL || "openai/gpt-oss-20b",
   });
 
   const error = new Error(
