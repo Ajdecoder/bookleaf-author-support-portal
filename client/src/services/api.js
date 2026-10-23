@@ -89,7 +89,7 @@ export async function sendAdminResponse({ ticketId, message }) {
 }
 
 export async function updateTicket(ticketId, updates) {
-  return apiRequest(`/tickets/${encodeURIComponent(ticketId)}`, {
+  return apiRequest(`/tickets/id/${encodeURIComponent(ticketId)}`, {
     method: "PATCH",
     body: jsonBody(updates),
   });

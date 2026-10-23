@@ -130,18 +130,26 @@
   // Get one ticket
   const getTicketDetails = async (req, res) => {
     try {
+      const ticketId = req.params.id || req.params.ticketId;
 
-      console.log(req.params.ticketId, 'data from getTicketDetails')
+      if (!ticketId) {
+        return res.status(400).json({ message: "Ticket ID is required" });
+      }
 
-      const ticket = await Ticket.findOne({ _id: req.params.ticketId });
+      const filter = mongoose.Types.ObjectId.isValid(ticketId)
+        ? { $or: [{ _id: ticketId }, { id: ticketId }] }
+        : { id: ticketId };
+
+      const ticket = await Ticket.findOne(filter);
 
       if (!ticket) {
         return res.status(404).json({ message: "Ticket not found" });
       }
 
-      // Author sirf apna ticket dekh sakta hai.
+      // Authors can view only their own ticket.
       if (
         req.user.role !== "admin" &&
+        ticket.authorId !== req.user.authorId &&
         ticket.authorId !== req.user.id
       ) {
         return res.status(403).json({ message: "Access denied" });
@@ -158,14 +166,17 @@
 
   // Update ticket (admin only)
   const updateTicket = async (req, res) => {
-
-    console.log('update controller hit hua')
     try {
-      if (req.user.role !== "admin") {
+      if (req.user?.role !== "admin") {
         return res.status(403).json({ message: "Admin access required" });
       }
 
-      const { status, category, priority, assignedTo } = req.body;
+      const ticketId = req.params.id || req.params.ticketId;
+      if (!ticketId) {
+        return res.status(400).json({ message: "Ticket ID is required" });
+      }
+
+      const { status, category, priority, assignedTo, subject, description } = req.body || {};
       const updates = {};
 
       if (status !== undefined) {
@@ -196,7 +207,11 @@
       }
 
       if (assignedTo !== undefined) {
-        if (assignedTo !== null) {
+        if (assignedTo !== null && assignedTo !== "") {
+          if (!mongoose.Types.ObjectId.isValid(assignedTo)) {
+            return res.status(400).json({ message: "Invalid admin assignee ID format" });
+          }
+
           const admin = await User.findOne({
             _id: assignedTo,
             role: "admin",
@@ -208,35 +223,57 @@
               message: "Invalid admin assignee",
             });
           }
+          updates.assignedTo = assignedTo;
+        } else {
+          updates.assignedTo = null;
         }
+      }
 
-        updates.assignedTo = assignedTo;
+      if (subject !== undefined) {
+        if (typeof subject !== "string" || subject.trim().length < 3 || subject.trim().length > 180) {
+          return res.status(400).json({ message: "Subject must be between 3 and 180 characters" });
+        }
+        updates.subject = subject.trim();
+      }
+
+      if (description !== undefined) {
+        if (typeof description !== "string" || description.trim().length < 10 || description.trim().length > 10000) {
+          return res.status(400).json({ message: "Description must be between 10 and 10000 characters" });
+        }
+        updates.description = description.trim();
       }
 
       if (!Object.keys(updates).length) {
         return res.status(400).json({ message: "No fields to update" });
       }
 
+      const filter = mongoose.Types.ObjectId.isValid(ticketId)
+        ? { $or: [{ _id: ticketId }, { id: ticketId }] }
+        : { id: ticketId };
+
       const ticket = await Ticket.findOneAndUpdate(
-        req.params.ticketId,
+        filter,
         { $set: updates },
         { new: true, runValidators: true }
-      )
-        .populate("author", "name email")
-        .populate("book", "title isbn")
-        .populate("assignedTo", "name email");
+      );
 
       if (!ticket) {
         return res.status(404).json({ message: "Ticket not found" });
       }
 
-      res.status(200).json({
+      return res.status(200).json({
         message: "Ticket updated successfully",
         ticket,
       });
     } catch (error) {
       console.error("updateTicket:", error);
-      res.status(500).json({ message: "Failed to update ticket" });
+      if (error.name === "ValidationError") {
+        return res.status(400).json({ message: error.message });
+      }
+      if (error.name === "CastError") {
+        return res.status(400).json({ message: "Invalid ticket ID format" });
+      }
+      return res.status(500).json({ message: "Failed to update ticket" });
     }
   };
 

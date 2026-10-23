@@ -1,8 +1,6 @@
 const { Book, Withdrawal } = require("../models");
 
-/**
- * Helper to compute author's royalty metrics, books, and withdrawal history
- */
+
 const getAuthorRoyaltyData = async (user) => {
   const bookFilter = user.authorId
     ? { $or: [{ author: user.id }, { authorId: user.authorId }] }
@@ -55,10 +53,6 @@ const getAuthorRoyaltyData = async (user) => {
   };
 };
 
-/**
- * GET /royalties/summary
- * Returns logged-in author's royalty metrics, book breakdown, and withdrawal history.
- */
 const getRoyaltySummary = async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
@@ -78,10 +72,6 @@ const getRoyaltySummary = async (req, res) => {
   }
 };
 
-/**
- * POST /royalties/withdraw
- * Submits a new withdrawal request for the logged-in author.
- */
 const requestWithdrawal = async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
@@ -135,10 +125,6 @@ const requestWithdrawal = async (req, res) => {
   }
 };
 
-/**
- * GET /royalties/withdrawals
- * Returns the logged-in author's withdrawal requests.
- */
 const getWithdrawals = async (req, res) => {
   try {
     if (!req.user || !req.user.id) {

@@ -19,16 +19,17 @@ const router = express.Router();
 // If not, add your authenticate middleware to this router.
 
 router.get("/", getAllTickets);
+router.get("/recent", getRecentTickets);
 
 // Keep specific routes before /:id
 router.get("/author/:authorId", getTicketByAuthorId);
+router.get("/id/:ticketId", getTicketById);
 
 router.post("/", createTicket);
 router.post("/:id/ai-draft", generateAiDraft);
 router.post("/:id/messages", addMessage);
+router.patch("/id/:ticketId", updateTicket);
 router.patch("/:id", updateTicket);
 router.get("/:id", getTicketDetails);
-router.get("/id/:ticketId", getTicketById);
-router.get("recent", getRecentTickets)
 
 module.exports = router;

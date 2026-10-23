@@ -6,7 +6,10 @@ import {
   sendAdminResponse,
   updateTicket,
   addInternalNote,
-  TICKET_STATUSES, generateAiDraft,
+  TICKET_STATUSES,
+  CATEGORIES,
+  PRIORITIES,
+  generateAiDraft,
 } from "../services/api.js";
 import StatusBadge from "../components/StatusBadge.jsx";
 
@@ -96,9 +99,29 @@ export default function TicketDetails() {
     try {
       setError("");
       const updated = await updateTicket(ticket._id, { status });
-      setTicket(updated);
+      setTicket(updated.ticket || updated);
     } catch (err) {
       setError(err.message || "Failed to update status");
+    }
+  };
+
+  const handlePriorityChange = async (priority) => {
+    try {
+      setError("");
+      const updated = await updateTicket(ticket._id, { priority });
+      setTicket(updated.ticket || updated);
+    } catch (err) {
+      setError(err.message || "Failed to update priority");
+    }
+  };
+
+  const handleCategoryChange = async (category) => {
+    try {
+      setError("");
+      const updated = await updateTicket(ticket._id, { category });
+      setTicket(updated.ticket || updated);
+    } catch (err) {
+      setError(err.message || "Failed to update category");
     }
   };
 
@@ -108,7 +131,7 @@ export default function TicketDetails() {
       const updated = await updateTicket(ticket._id, {
         assignedTo: user.id,
       });
-      setTicket(updated);
+      setTicket(updated.ticket || updated);
     } catch (err) {
       setError(err.message || "Failed to assign ticket");
     }
@@ -348,19 +371,56 @@ export default function TicketDetails() {
 
           {isAdmin && (
             <div className="mt-5 space-y-3 border-t border-slate-200 pt-5">
-              <select
-                value={ticket.status}
-                onChange={(event) =>
-                  handleStatusChange(event.target.value)
-                }
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
-              >
-                {TICKET_STATUSES.map((status) => (
-                  <option key={status} value={status}>
-                    {status}
-                  </option>
-                ))}
-              </select>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-600">Status</label>
+                <select
+                  value={ticket.status}
+                  onChange={(event) =>
+                    handleStatusChange(event.target.value)
+                  }
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                >
+                  {TICKET_STATUSES.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-600">Priority</label>
+                <select
+                  value={ticket.priority}
+                  onChange={(event) =>
+                    handlePriorityChange(event.target.value)
+                  }
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                >
+                  {PRIORITIES.map((priority) => (
+                    <option key={priority} value={priority}>
+                      {priority}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-600">Category</label>
+                <select
+                  value={ticket.category}
+                  onChange={(event) =>
+                    handleCategoryChange(event.target.value)
+                  }
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                >
+                  {CATEGORIES.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
               <button
                 type="button"
