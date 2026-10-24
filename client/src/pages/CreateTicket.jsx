@@ -52,7 +52,7 @@ export default function CreateTicket() {
       }
       await submitTicket(payload);
 
-      // navigate(`/tickets/${ticket._id}`);
+      navigate(`/tickets/${ticket._id}`);
     } catch (err) {
       setError(err.message || "Unable to submit ticket");
     } finally {

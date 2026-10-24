@@ -7,7 +7,7 @@ import StatusBadge from "../components/StatusBadge.jsx";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const [ books, setBooks] = useState([]);
+  const [books, setBooks] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +47,7 @@ export default function Dashboard() {
   // const openTickets = tickets?.filter(
   //   (ticket) => ticket.status === "Open" || ticket.status === "In Progress"
   // ).length;
-  const openTickets = () =>{}
+  const openTickets = () => { }
 
   return (
     <div className="space-y-6">
@@ -67,67 +67,97 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <section className="rounded-xl border border-slate-200 bg-white">
-          <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-            <h2 className="font-semibold">Recent Books</h2>
-            <Link to="/books" className="text-sm font-medium text-indigo-600">
+
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
+        {/* Recent Books */}
+        <section className="min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-5 sm:py-4">
+            <h2 className="text-base font-semibold sm:text-lg">
+              Recent Books
+            </h2>
+            <Link
+              to="/books"
+              className="shrink-0 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+            >
               View all
             </Link>
           </div>
 
           <div className="divide-y divide-slate-100">
             {books.slice(0, 3).map((book) => (
-              <div key={book.id} className="flex items-center justify-between px-5 py-4">
-                <div>
-                  <p className="text-sm font-medium">{book.title}</p>
-                  <p className="text-xs text-slate-500">{book.isbn}</p>
+              <div
+                key={book.id}
+                className="flex min-w-0 items-center justify-between gap-3 px-4 py-3 sm:px-5 sm:py-4"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-slate-900">
+                    {book.title}
+                  </p>
+                  <p className="mt-1 break-all text-xs text-slate-500">
+                    {book.isbn}
+                  </p>
                 </div>
-                <StatusBadge label={book.status} />
+
+                <div className="shrink-0">
+                  <StatusBadge label={book.status} />
+                </div>
               </div>
             ))}
 
             {books.length === 0 && (
-              <p className="px-5 py-8 text-center text-sm text-slate-500">
+              <p className="px-4 py-8 text-center text-sm text-slate-500 sm:px-5">
                 No books found.
               </p>
             )}
           </div>
         </section>
 
-        <section className="rounded-xl border border-slate-200 bg-white">
-          <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-            <h2 className="font-semibold">Recent Tickets</h2>
-            <Link to="/tickets" className="text-sm font-medium text-indigo-600">
+        {/* Recent Tickets */}
+        <section className="min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-5 sm:py-4">
+            <h2 className="text-base font-semibold sm:text-lg">
+              Recent Tickets
+            </h2>
+            <Link
+              to="/tickets"
+              className="shrink-0 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+            >
               View all
             </Link>
           </div>
 
           <div className="divide-y divide-slate-100">
             {tickets.slice(-3).reverse().map((ticket) => (
-              <Link 
+              <Link
                 key={ticket.id}
                 to={`/tickets/${ticket._id}`}
-                className="block px-5 py-4 hover:bg-slate-50"
+                className="block min-w-0 px-4 py-3 hover:bg-slate-50 sm:px-5 sm:py-4"
               >
-                <div className="flex items-center justify-between gap-3">
-                  <p className="truncate text-sm font-medium">{ticket.subject}</p>
-                  <StatusBadge label={ticket.status} />
+                <div className="flex min-w-0 items-center justify-between gap-3">
+                  <p className="min-w-0 flex-1 truncate text-sm font-medium text-slate-900">
+                    {ticket.subject}
+                  </p>
+                  <div className="shrink-0">
+                    <StatusBadge label={ticket.status} />
+                  </div>
                 </div>
-                <p className="mt-1 text-xs text-slate-500">
-                  {ticket.category} • {new Date(ticket.createdAt).toLocaleDateString()}
+
+                <p className="mt-1 truncate text-xs text-slate-500">
+                  {ticket.category} •{" "}
+                  {new Date(ticket.createdAt).toLocaleDateString()}
                 </p>
               </Link>
             ))}
 
             {tickets.length === 0 && (
-              <p className="px-5 py-8 text-center text-sm text-slate-500">
+              <p className="px-4 py-8 text-center text-sm text-slate-500 sm:px-5">
                 No support tickets yet.
               </p>
             )}
           </div>
         </section>
       </div>
+
     </div>
   );
 }

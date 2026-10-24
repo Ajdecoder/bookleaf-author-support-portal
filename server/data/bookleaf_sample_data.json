@@ -467,6 +467,57 @@
           ]
         }
       ]
+    },
+    {
+  "author_id": "AUTH_DEMO",
+  "name": "Demo Author",
+  "email": "author@bookleaf.com",
+  "phone": "+91-98765-12345",
+  "city": "New Delhi",
+  "joined_date": "2026-10-23",
+  "books": [
+    {
+      "book_id": "BK_DEMO001",
+      "title": "The Art of Building Dreams",
+      "isbn": "978-93-50000-01-1",
+      "genre": "Self-Help / Personal Development",
+      "publication_date": "2026-08-15",
+      "status": "Published & Live",
+      "mrp": 399,
+      "author_royalty_per_copy": 40,
+      "total_copies_sold": 125,
+      "total_royalty_earned": 5000,
+      "royalty_paid": 3000,
+      "royalty_pending": 2000,
+      "last_royalty_payout_date": "2026-09-15",
+      "print_partner": "In-House",
+      "available_on": [
+        "Amazon India",
+        "Flipkart",
+        "BookLeaf Store"
+      ]
+    },
+    {
+      "book_id": "BK_DEMO002",
+      "title": "Code, Coffee & Creativity",
+      "isbn": "978-93-50000-02-8",
+      "genre": "Technology / Programming",
+      "publication_date": "2026-09-10",
+      "status": "Published & Live",
+      "mrp": 499,
+      "author_royalty_per_copy": 50,
+      "total_copies_sold": 80,
+      "total_royalty_earned": 4000,
+      "royalty_paid": 2000,
+      "royalty_pending": 2000,
+      "last_royalty_payout_date": "2026-09-15",
+      "print_partner": "In-House",
+      "available_on": [
+        "Amazon India",
+        "BookLeaf Store"
+      ]
     }
+  ]
+}
   ]
 }
