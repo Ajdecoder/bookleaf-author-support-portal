@@ -50,10 +50,12 @@ export default function CreateTicket() {
         description: form.description,
         category: form.category,
       }
-      await submitTicket(payload);
+      const response = await submitTicket(payload);
+      console.log(response);
 
-      navigate(`/tickets/${ticket._id}`);
+      navigate(`/tickets/${response.ticket._id}`);
     } catch (err) {
+      console.log(err, 'err came in createticket')
       setError(err.message || "Unable to submit ticket");
     } finally {
       setSubmitting(false);
